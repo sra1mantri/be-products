@@ -1,5 +1,6 @@
 package com.assignment.products.integration;
 
+import com.assignment.products.entity.Order;
 import com.assignment.products.entity.Product;
 import com.assignment.products.entity.User;
 import com.assignment.products.enums.Role;
@@ -19,21 +20,17 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.test.context.support.TestExecutionEvent;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -73,13 +70,12 @@ public class OrderControllerIntegrationTest {
                 List.of(new SimpleGrantedAuthority("ROLE_USER"))
         );
 
-        Product product = saveAndReturnProduct();
+        Product product = saveAndReturnProduct(BigDecimal.valueOf(100));
 
         OrderRequestDTO orderRequest = getOrderRequestDTO(product);
 
         mockMvc.perform(post("/api/v1/orders/place-order")
                         .with(csrf())
-                        // HERE IS THE FIX: We inject our manual Auth token
                         .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderRequest)))
@@ -99,7 +95,7 @@ public class OrderControllerIntegrationTest {
                 List.of(new SimpleGrantedAuthority("ROLE_USER"))
         );
 
-        Product product = saveAndReturnProduct();
+        Product product = saveAndReturnProduct(BigDecimal.valueOf(100));
 
         OrderRequestDTO orderRequest = new OrderRequestDTO();
         OrderItemDTO orderItemDTO = new OrderItemDTO();
@@ -109,7 +105,7 @@ public class OrderControllerIntegrationTest {
 
         mockMvc.perform(post("/api/v1/orders/place-order")
                         .with(csrf())
-                        .with(authentication(auth)) // Inject our manual user
+                        .with(authentication(auth))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderRequest)))
                 .andDo(org.springframework.test.web.servlet.result.MockMvcResultHandlers.print())
@@ -117,6 +113,36 @@ public class OrderControllerIntegrationTest {
 
         Product productInDb = productsRepository.findById(product.getId()).get();
         assertEquals(10, productInDb.getQuantity(), "Stock should not change on failed order");
+    }
+
+    @Test
+    void placeOrder_ShouldApply_discount_successfully() throws Exception {
+
+        User customUser = saveAndReturnCustomer();
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                customUser,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+
+        Product product = saveAndReturnProduct(BigDecimal.valueOf(1000));
+
+        OrderRequestDTO orderRequest = new OrderRequestDTO();
+        OrderItemDTO orderItemDTO = new OrderItemDTO();
+        orderItemDTO.setProductId(product.getId());
+        orderItemDTO.setQuantity(2);
+        orderRequest.setOrderItems(List.of(orderItemDTO));
+
+        mockMvc.perform(post("/api/v1/orders/place-order")
+                        .with(csrf())
+                        .with(authentication(auth))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderRequest)))
+                .andDo(org.springframework.test.web.servlet.result.MockMvcResultHandlers.print())
+                .andExpect(status().isOk());
+
+        List<Order> orderInDB = orderRepository.findAll();
+        assertEquals(BigDecimal.valueOf(1900.0).setScale(2), orderInDB.getFirst().getTotalPrice().setScale(2));
     }
 
     private static OrderRequestDTO getOrderRequestDTO(Product product) {
@@ -128,10 +154,10 @@ public class OrderControllerIntegrationTest {
         return orderRequest;
     }
 
-    private Product saveAndReturnProduct() {
+    private Product saveAndReturnProduct(BigDecimal price) {
         Product product = new Product();
         product.setName("In Stock Item");
-        product.setPrice(BigDecimal.valueOf(100.00));
+        product.setPrice(price);
         product.setQuantity(10);
         product = productsRepository.save(product);
         return product;

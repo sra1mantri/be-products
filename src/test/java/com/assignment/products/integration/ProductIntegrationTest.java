@@ -120,7 +120,7 @@ public class ProductIntegrationTest {
 
         Product updated = productsRepository.findById(existing.getId()).orElseThrow();
         assertEquals("New Name", updated.getName());
-        assertEquals(BigDecimal.valueOf(75.0).setScale(2), updated.getPrice().setScale(2)); // Handle BigDecimal precision
+        assertEquals(BigDecimal.valueOf(75.0).setScale(2), updated.getPrice().setScale(2));
     }
 
     @Test
@@ -130,7 +130,7 @@ public class ProductIntegrationTest {
 
         mockMvc.perform(delete("/api/v1/products/delete-product/{id}", existing.getId())
                         .with(csrf()))
-                .andExpect(status().isNoContent()); // 204
+                .andExpect(status().isNoContent());
 
         assertTrue(productsRepository.findById(existing.getId()).isEmpty(), "Product should be gone");
     }

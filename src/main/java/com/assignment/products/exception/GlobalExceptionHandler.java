@@ -34,7 +34,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ErrorResponseDTO> handleAuthorizationDenied(AuthorizationDeniedException ex, HttpServletRequest request) {
 
-        // Safe check for user principal
         String user = (request.getUserPrincipal() != null) ? request.getUserPrincipal().getName() : "Anonymous";
         log.warn("Authorization denied for user: {}", user);
 
