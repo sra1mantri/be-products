@@ -1,7 +1,25 @@
-A Spring boot application that uses JWT to do Role based CRUD operations.
-1) Login service to fetch the JWT token and use it in the subsequent requests
-2) Users and Products are created using the flyway scripts during the start up
-3) Modular based implementation which can be easily divided to Microservices based on the need
-4) As this is a simple application, The DB Password and the Secret key are maintained in the Environmental file while running the application in the IDE.
-5) Unit and Integration Tests to cover the scenarios
-6) Added OpenAPI and Swagger specification 
+# **Product Order Management**
+
+A Spring boot application for product management and users to place orders. The application uses the JWT token,role based access to the services, relational database to manage the products, user and Order information.
+
+## Features
+  * RESTful API with Swagger documentation
+  * JWT Authentication with Role based access control
+  * Discount strategy using Strategy Pattern
+  * Postgres database for Storing the User and Inventory Information
+  * Unit and Integration Testing to cover the scenarios 
+  * Database migration with Flyway 
+
+## Table of Contents
+  * Setup Instructions
+  * Design Decisions
+  * API Documentation
+
+## Setup Instructions
+  * Java 17+
+  * Maven 3.9+
+  * Postgres
+
+    Take the postgres image from docker and start the posgres using the below command
+      docker run -d -e POSTGRES_PASSWORD=root -p 5432:5432 --name my-postgres postgres
+  
