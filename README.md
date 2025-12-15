@@ -17,9 +17,12 @@ The application uses JWT authentication, role-based access control, and a relati
 ---
 
 ## Table of Contents
-- Setup Instructions
-- Design Decisions
-- API Documentation
+- [Setup Instructions](#setup-instructions)
+- [Design Decisions](#design-decisions)
+- [API Documentation](#api-documentation)
+  - [Authentication API](#authentication-api)
+  - [Product Management APIs](#product-management-apis)
+  - [Order Management APIs](#order-management-apis)
 
 ---
 
@@ -58,9 +61,9 @@ mvn spring-boot:run \
 - Layered Architecture: **Controller → Service → Repository**
 - DTO–Entity separation to avoid exposing unnecessary fields
 - Strategy Pattern for discount calculation:
-    - `PREMIUM_USER` → 10% discount
-    - Order amount > $500 → 5% discount
-    - `PREMIUM_USER` + Order amount > $500 → 15% combined discount
+  - `PREMIUM_USER` → 10% discount
+  - Order amount > $500 → 5% discount
+  - `PREMIUM_USER` + Order amount > $500 → 15% combined discount
 - Discount logic iterates through all strategies and applies based on rule applicability
 - Easily extensible discount strategy without breaking existing logic
 - Database indexing for optimized queries
@@ -176,6 +179,56 @@ curl --location --request POST 'http://localhost:8080/api/v1/orders/place-order'
 ```
 
 ---
+
+---
+
+## Testing Strategy
+
+The application includes a comprehensive **Unit and Integration Testing** strategy to ensure correctness, security, and reliability of the APIs.
+
+A total of **18 test cases** are implemented to cover critical business and technical scenarios.
+
+---
+
+### Unit Tests
+
+Unit tests focus on validating individual components in isolation using mocks.
+
+**Technologies used**
+- JUnit 5
+- Mockito
+- Spring Boot Test
+
+---
+
+### Integration Tests
+
+Integration tests validate the complete request flow from **Controller → Service → Repository** using an embedded database.
+
+**Technologies used**
+- Spring Boot Test
+- MockMvc
+- H2 in-memory database
+
+---
+
+### Test Coverage Summary
+
+| Test Type        | Count  |
+|------------------|--------|
+| Unit Tests       | 8      |
+| Integration Tests| 10    |
+| **Total Tests**  | **18** |
+
+---
+
+### How to Run Tests
+
+Run all unit and integration tests using:
+
+```bash
+mvn test
+
 
 ## Notes
 - Replace `<JWT_TOKEN>` with the token received from the **Login API**

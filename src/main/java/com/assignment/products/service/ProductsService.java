@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,14 +42,28 @@ public class ProductsService {
                 productMapper::convertToDTO).collect(Collectors.toList());
     }
 
-    public ProductsResponseDTO updateProducts(long productId, ProductUpdateRequestDTO productRequestDTO) {
-        Product product = productsRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("Product not found"));
-        product.setName(productRequestDTO.getName());
-        product.setDescription(productRequestDTO.getDescription());
-        product.setPrice(productRequestDTO.getPrice());
-        product.setQuantity(productRequestDTO.getQuantity());
+    public ProductsResponseDTO updateProducts(
+            long productId,
+            ProductUpdateRequestDTO productRequestDTO) {
+
+        Product product = productsRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        Optional.ofNullable(productRequestDTO.getName())
+                .ifPresent(product::setName);
+
+        Optional.ofNullable(productRequestDTO.getDescription())
+                .ifPresent(product::setDescription);
+
+        Optional.ofNullable(productRequestDTO.getPrice())
+                .ifPresent(product::setPrice);
+
+        Optional.ofNullable(productRequestDTO.getQuantity())
+                .ifPresent(product::setQuantity);
+
         return productMapper.convertToDTO(productsRepository.save(product));
     }
+
 
     public void deleteProduct(long productId) {
         productsRepository.deleteById(productId);

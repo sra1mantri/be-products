@@ -20,6 +20,9 @@ public class JwtService {
     @Value("${spring.jwt.secret-key}")
     String securityKey;
 
+    @Value("${spring.jwt.token.expiry}")
+    int expiryTime;
+
     private Key getSignInKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(securityKey));
     }
@@ -35,7 +38,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 600000))
+                .setExpiration(new Date(System.currentTimeMillis() + expiryTime))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
