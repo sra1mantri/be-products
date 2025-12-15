@@ -149,7 +149,7 @@ curl --location --request PUT 'http://localhost:8080/api/v1/products/update-prod
 ### 4. Delete Product (ADMIN only)
 
 ```bash
-curl --location --request DELETE 'http://localhost:8080/api/v1/products/3' \
+curl --location --request DELETE 'http://localhost:8080/api/v1/products/delete-product/3' \
 --header 'Authorization: Bearer <JWT_TOKEN>'
 ```
 

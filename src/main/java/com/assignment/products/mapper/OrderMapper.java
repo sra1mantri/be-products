@@ -3,7 +3,7 @@ package com.assignment.products.mapper;
 import com.assignment.products.entity.Order;
 import com.assignment.products.entity.OrderItem;
 import com.assignment.products.model.OrderResponseDTO;
-import com.assignment.products.model.OrderResponseDTO.OrderItemDTO;
+import com.assignment.products.model.OrderResponseDTO.OrderItemResponseDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -18,8 +18,8 @@ public class OrderMapper {
                 .build();
     }
 
-    private OrderItemDTO convertToDto(OrderItem orderItem) {
-        return OrderItemDTO.builder()
+    private OrderItemResponseDTO convertToDto(OrderItem orderItem) {
+        return OrderItemResponseDTO.builder()
                 .productId(orderItem.getProduct().getId())
                 .quantity(orderItem.getQuantity())
                 .productName(orderItem.getProduct().getName())

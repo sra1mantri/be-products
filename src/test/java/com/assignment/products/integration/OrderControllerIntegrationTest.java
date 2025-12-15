@@ -5,7 +5,7 @@ import com.assignment.products.entity.Product;
 import com.assignment.products.entity.User;
 import com.assignment.products.enums.Role;
 import com.assignment.products.model.OrderRequestDTO;
-import com.assignment.products.model.OrderRequestDTO.OrderItemDTO;
+import com.assignment.products.model.OrderRequestDTO.OrderItemRequestDTO;
 import com.assignment.products.repository.OrderRepository;
 import com.assignment.products.repository.ProductsRepository;
 import com.assignment.products.repository.UserRepository;
@@ -26,7 +26,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -98,10 +97,10 @@ public class OrderControllerIntegrationTest {
         Product product = saveAndReturnProduct(BigDecimal.valueOf(100));
 
         OrderRequestDTO orderRequest = new OrderRequestDTO();
-        OrderItemDTO orderItemDTO = new OrderItemDTO();
-        orderItemDTO.setProductId(product.getId());
-        orderItemDTO.setQuantity(12);
-        orderRequest.setOrderItems(List.of(orderItemDTO));
+        OrderItemRequestDTO orderItemRequestDTO = new OrderItemRequestDTO();
+        orderItemRequestDTO.setProductId(product.getId());
+        orderItemRequestDTO.setQuantity(12);
+        orderRequest.setOrderItems(List.of(orderItemRequestDTO));
 
         mockMvc.perform(post("/api/v1/orders/place-order")
                         .with(csrf())
@@ -128,10 +127,10 @@ public class OrderControllerIntegrationTest {
         Product product = saveAndReturnProduct(BigDecimal.valueOf(1000));
 
         OrderRequestDTO orderRequest = new OrderRequestDTO();
-        OrderItemDTO orderItemDTO = new OrderItemDTO();
-        orderItemDTO.setProductId(product.getId());
-        orderItemDTO.setQuantity(2);
-        orderRequest.setOrderItems(List.of(orderItemDTO));
+        OrderItemRequestDTO orderItemRequestDTO = new OrderItemRequestDTO();
+        orderItemRequestDTO.setProductId(product.getId());
+        orderItemRequestDTO.setQuantity(2);
+        orderRequest.setOrderItems(List.of(orderItemRequestDTO));
 
         mockMvc.perform(post("/api/v1/orders/place-order")
                         .with(csrf())
@@ -147,10 +146,10 @@ public class OrderControllerIntegrationTest {
 
     private static OrderRequestDTO getOrderRequestDTO(Product product) {
         OrderRequestDTO orderRequest = new OrderRequestDTO();
-        OrderItemDTO orderItemDTO = new OrderItemDTO();
-        orderItemDTO.setProductId(product.getId());
-        orderItemDTO.setQuantity(2);
-        orderRequest.setOrderItems(List.of(orderItemDTO));
+        OrderItemRequestDTO orderItemRequestDTO = new OrderItemRequestDTO();
+        orderItemRequestDTO.setProductId(product.getId());
+        orderItemRequestDTO.setQuantity(2);
+        orderRequest.setOrderItems(List.of(orderItemRequestDTO));
         return orderRequest;
     }
 

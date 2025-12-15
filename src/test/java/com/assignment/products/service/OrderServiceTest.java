@@ -6,7 +6,7 @@ import com.assignment.products.entity.Product;
 import com.assignment.products.entity.User;
 import com.assignment.products.mapper.OrderMapper;
 import com.assignment.products.model.OrderRequestDTO;
-import com.assignment.products.model.OrderRequestDTO.OrderItemDTO;
+import com.assignment.products.model.OrderRequestDTO.OrderItemRequestDTO;
 import com.assignment.products.model.OrderResponseDTO;
 import com.assignment.products.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +56,7 @@ public class OrderServiceTest {
         user.setId(1L);
         user.setUserName("user");
 
-        OrderRequestDTO.OrderItemDTO itemDto = new OrderItemDTO(101L, 2);
+        OrderItemRequestDTO itemDto = new OrderItemRequestDTO(101L, 2);
         OrderRequestDTO request = new OrderRequestDTO(Collections.singletonList(itemDto));
 
         Product product = new Product();
@@ -82,7 +82,7 @@ public class OrderServiceTest {
         user.setId(1L);
         user.setUserName("user");
 
-        OrderRequestDTO.OrderItemDTO itemDto = new OrderItemDTO(101L, 20);
+        OrderItemRequestDTO itemDto = new OrderItemRequestDTO(101L, 20);
         OrderRequestDTO request = new OrderRequestDTO(Collections.singletonList(itemDto));
 
         Product product = new Product();

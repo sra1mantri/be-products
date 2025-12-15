@@ -26,7 +26,9 @@ public class ProductSpecification {
             if (onlyAvailable) {
                 spec = spec.and((r, q, b) -> b.greaterThan(r.get("quantity"), 0));
             }
-            if (!isAdmin) {
+            if (isAdmin) {
+                spec = spec.and((r, q, b) -> b.isTrue(r.get("isDeleted")));
+            }else{
                 spec = spec.and((r, q, b) -> b.isFalse(r.get("isDeleted")));
             }
 

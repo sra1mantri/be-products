@@ -1,20 +1,20 @@
 package com.assignment.products.exception;
 
 import com.assignment.products.model.ErrorResponseDTO;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.nio.file.AccessDeniedException;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Hidden
 @Slf4j
 public class GlobalExceptionHandler {
 

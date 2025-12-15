@@ -1,6 +1,5 @@
 package com.assignment.products.model;
 
-import com.assignment.products.model.OrderRequestDTO.OrderItemDTO;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +17,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderResponseDTO {
 
-    List<OrderItemDTO> orderItems;
+    List<OrderItemResponseDTO> orderItems;
     BigDecimal totalOrderPrice;
 
 
@@ -26,7 +25,7 @@ public class OrderResponseDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class OrderItemDTO {
+    public static class OrderItemResponseDTO {
         long productId;
         String productName;
         int quantity;

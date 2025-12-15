@@ -8,7 +8,7 @@ import com.assignment.products.entity.User;
 import com.assignment.products.exception.NotStockAvailableException;
 import com.assignment.products.mapper.OrderMapper;
 import com.assignment.products.model.OrderRequestDTO;
-import com.assignment.products.model.OrderRequestDTO.OrderItemDTO;
+import com.assignment.products.model.OrderRequestDTO.OrderItemRequestDTO;
 import com.assignment.products.model.OrderResponseDTO;
 import com.assignment.products.model.PrepareOrderItem;
 import com.assignment.products.repository.OrderRepository;
@@ -44,7 +44,7 @@ public class OrderService {
         List<PrepareOrderItem> prepareOrderItems = new ArrayList<>();
         BigDecimal subTotal = BigDecimal.ZERO;
 
-        for (OrderItemDTO itemDto : orderRequestDTO.getOrderItems()) {
+        for (OrderItemRequestDTO itemDto : orderRequestDTO.getOrderItems()) {
             Product product = productsService.findProductById(itemDto.getProductId());
             if(product.getQuantity() < itemDto.getQuantity()){
                 log.error("Order Creation failed. Product {} (ID: {}) has insufficient stock. Requested: {}, Available: {}"

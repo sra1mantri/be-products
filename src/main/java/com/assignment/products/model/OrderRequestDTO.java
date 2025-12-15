@@ -31,13 +31,13 @@ public class OrderRequestDTO {
     @Valid
     @NotEmpty(message = "Order must contain at least one item")
     @Size(max = 50, message = "Cannot order more than 50 distinct items at once")
-    List<OrderItemDTO> orderItems;
+    List<OrderItemRequestDTO> orderItems;
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class OrderItemDTO {
+    public static class OrderItemRequestDTO {
         @Schema(
                 description = "The unique identifier of the product",
                 example = "10023",

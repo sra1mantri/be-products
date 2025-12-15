@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE products SET is_deleted = false WHERE id=?")
+@SQLDelete(sql = "UPDATE products SET is_deleted = true WHERE id=?")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Product {
 
