@@ -228,7 +228,9 @@ Run all unit and integration tests using:
 
 ```bash
 mvn test
+```
 
+---
 
 ## Notes
 - Replace `<JWT_TOKEN>` with the token received from the **Login API**
