@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -18,6 +19,8 @@ import java.util.List;
 public class OrderResponseDTO {
 
     List<OrderItemDTO> orderItems;
+    BigDecimal totalOrderPrice;
+
 
     @Data
     @Builder
@@ -25,6 +28,7 @@ public class OrderResponseDTO {
     @AllArgsConstructor
     public static class OrderItemDTO {
         long productId;
+        String productName;
         int quantity;
     }
 }

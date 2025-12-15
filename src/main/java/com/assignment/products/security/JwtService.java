@@ -1,5 +1,6 @@
 package com.assignment.products.security;
 
+import com.assignment.products.model.LoginResponseDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,6 +22,13 @@ public class JwtService {
 
     private Key getSignInKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(securityKey));
+    }
+
+    public LoginResponseDTO validateAndGenerateToken(UserDetails user){
+        return LoginResponseDTO.builder()
+                .jwtToken(generateToken(user))
+                .userId(user.getUsername())
+                .build();
     }
 
     public String generateToken(UserDetails userDetails){

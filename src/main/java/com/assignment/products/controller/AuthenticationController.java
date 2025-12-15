@@ -1,8 +1,9 @@
 package com.assignment.products.controller;
 
 import com.assignment.products.model.LoginRequestDTO;
+import com.assignment.products.model.LoginResponseDTO;
 import com.assignment.products.security.JwtService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,21 +16,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class AuthenticationController {
 
-    @Autowired AuthenticationManager authenticationManager;
-    @Autowired UserDetailsService userDetailsService;
-    @Autowired JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+    private final JwtService jwtService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDTO request) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUserName(), request.getPassword())
         );
         final UserDetails user = userDetailsService.loadUserByUsername(request.getUserName());
-        final String jwt = jwtService.generateToken(user);
-
-        return ResponseEntity.ok(jwt);
+        return ResponseEntity.ok(jwtService.validateAndGenerateToken(user));
     }
 }

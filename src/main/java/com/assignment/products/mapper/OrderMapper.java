@@ -14,6 +14,7 @@ public class OrderMapper {
     public OrderResponseDTO convertToOrderResponseDTO(Order order) {
         return OrderResponseDTO.builder()
                 .orderItems(order.getItems().stream().map(this::convertToDto).collect(Collectors.toList()))
+                .totalOrderPrice(order.getTotalPrice())
                 .build();
     }
 
@@ -21,6 +22,7 @@ public class OrderMapper {
         return OrderItemDTO.builder()
                 .productId(orderItem.getProduct().getId())
                 .quantity(orderItem.getQuantity())
+                .productName(orderItem.getProduct().getName())
                 .build();
     }
 }
